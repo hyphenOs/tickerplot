@@ -4,3 +4,6 @@ venv3
 **/*sqlite3
 **pyc
 **/__pycache__
+**/*egg-info
+build
+dist
