@@ -172,7 +172,7 @@ def create_or_get_nse_indices_hist_data(metadata=None):
 
     return nse_idx_hist_data
 
-def create_or_get_nse_corp_actions_hist_data():
+def create_or_get_nse_corp_actions_hist_data(metadata=None):
     """
     Creates table for NSE Corporate Actions data.
 
