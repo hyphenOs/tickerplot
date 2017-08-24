@@ -24,10 +24,11 @@ class CorpActionEnum(enum.Enum):
     B = 'B'
     S = 'S'
 
-# Change the following line if you want to use different DB connections
-_DB_STR = 'sqlite:///test.sqlite3'
+class TickerplotExceptionNoMetadata(Exception):
+    pass
 
-_METADATA  = MetaData(bind=_DB_STR)
+class TickerplotExceptionNoDBEngine(Exception):
+    pass
 
 def create_or_get_all_scrips_table(metadata=None):
     """
@@ -47,7 +48,10 @@ def create_or_get_all_scrips_table(metadata=None):
     bse_id : BSE ID for the script.
     bse_group: BSE Group for the script.
     """
-    meta_data = metadata  or _METADATA
+    if not metadata:
+        raise TickerplotExceptionNoMetadata
+
+    meta_data = metadata
 
     table_name = 'all_scrips_info'
     if table_name not in meta_data.tables :
@@ -82,7 +86,10 @@ def create_or_get_nse_bhav_deliv_download_info(metadata=None):
     error_type : Number of times error occurred
     """
 
-    meta_data = metadata or _METADATA
+    if not metadata:
+        raise TickerplotExceptionNoMetadata
+
+    meta_data = metadata
 
     table_name = 'nse_bhav_deliv_download_info'
     if table_name not in meta_data.tables :
@@ -116,7 +123,10 @@ def create_or_get_nse_equities_hist_data(metadata=None):
     delivery : Total delivery for the security for the day.
     """
 
-    meta_data = metadata or _METADATA
+    if not metadata:
+        raise TickerplotExceptionNoMetadata
+
+    meta_data = metadata
 
     table_name = 'nse_equities_hist_data'
     if table_name not in meta_data.tables:
@@ -153,7 +163,10 @@ def create_or_get_nse_indices_hist_data(metadata=None):
     We don't need other data like volume/delivery.
     """
 
-    meta_data = metadata or _METADATA
+    if not metadata:
+        raise TickerplotExceptionNoMetadata
+
+    meta_data = metadata
 
     table_name = 'nse_indices_hist_data'
     if table_name not in meta_data.tables:
@@ -183,7 +196,10 @@ def create_or_get_nse_corp_actions_hist_data(metadata=None):
     delta : For dividend difference to be applied to stock price.
     """
 
-    meta_data = metadata or _METADATA
+    if not metadata:
+        raise TickerplotExceptionNoMetadata
+
+    meta_data = metadata
 
     table_name = 'nse_corp_actions_hist_data'
     if table_name not in meta_data.tables:
@@ -204,31 +220,34 @@ def create_or_get_nse_corp_actions_hist_data(metadata=None):
 def get_metadata(db_str=None):
 
     if not db_str:
-        return _METADATA
+        return None
 
     return MetaData(bind=db_str)
 
 def get_engine(metadata=None):
 
-    meta_data = metadata or _METADATA
+    if not metadata:
+        raise TickerplotExceptionNoMetadata
+
+    meta_data = metadata
 
     return meta_data.bind
 
-def execute_one_insert(statement, ignore_error=True):
+def execute_one_insert(statement, ignore_error=True, engine=None):
     result = None
     try:
-        result = _do_execute_one(statement)
+        result = _do_execute_one(statement, engine)
     except IntegrityError:
         if ignore_error:
             pass
         raise
     return result
 
-def execute_many_insert(statements, ignore_error=True):
+def execute_many_insert(statements, ignore_error=True, engine=None):
     results = []
     for statement in statements:
         try:
-            result = _do_execute_one(statement)
+            result = _do_execute_one(statement, engine)
             results.append(result)
         except IntegrityError:
             if ignore_error:
@@ -236,12 +255,13 @@ def execute_many_insert(statements, ignore_error=True):
             raise
     return results
 
-def execute_one(statement):
-    return _do_execute_one(statement)
+def execute_one(statement, engine=None):
+    return _do_execute_one(statement, engine)
 
-def _do_execute_one(statement):
+def _do_execute_one(statement, engine=None):
 
-    engine = _METADATA.bind
+    if not engine:
+        raise TickerplotExceptionNoDBEngine
 
     result = engine.execute(statement)
 
