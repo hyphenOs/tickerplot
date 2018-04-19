@@ -1,3 +1,7 @@
+import cProfile
+import StringIO
+import pstats
+
 
 class TickerplotProfiler(object):
 
@@ -37,5 +41,5 @@ class TickerplotProfiler(object):
         value = self.stream.getvalue()
         # always log value as warning, so goes into the logs
         if self.logger is not None:
-            logger.warning(value)
+            self.logger.warning(value)
         print (value)

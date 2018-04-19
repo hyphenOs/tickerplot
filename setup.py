@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 import os
 
 from tickerplot import __version__
+print __version__
 version = __version__
 
 curdir = os.path.abspath(os.path.dirname(__file__))

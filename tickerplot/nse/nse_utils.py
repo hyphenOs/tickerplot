@@ -35,13 +35,13 @@ def nse_get_all_stocks_list(start=None, count=-1):
         raise
 
     r = requests.get(ALL_STOCKS_CSV_URL)
-    module_logger.info("GET: %s" % ALL_STOCKS_CSV_URL)
+    module_logger.info("GET: %s", ALL_STOCKS_CSV_URL)
     if r.ok:
         i = 0
         for line in r.text.split("\n"):
             line = line.split(",")
             if len(line) < 8:
-                module_logger.info("Unhandled line: %s" % line)
+                module_logger.info("Unhandled line: %s", line)
                 continue
             symbol = line[0].strip('"')
             if symbol.lower().strip() == 'symbol':
@@ -50,16 +50,16 @@ def nse_get_all_stocks_list(start=None, count=-1):
                 i += 1
                 continue
             if count > 0 and i >= start+count:
-               raise StopIteration
+                raise StopIteration
             name = line[2].strip('"')
             listing_date = line[3].strip('"')
             isin = line[1].strip('"')
             a = ScripBaseinfoNSE(symbol, name, listing_date, isin)
-            module_logger.debug("ScripBaseInfoNSE: %s" % str(a))
+            module_logger.debug("ScripBaseInfoNSE: %s", str(a))
             i += 1
             yield a
     else:
-        module_logger.error("GET: %s(%d)" % (ALL_STOCKS_CSV_URl, x.status_code))
+        module_logger.error("GET: %s(%d)", ALL_STOCKS_CSV_URL, r.status_code)
         raise StopIteration
 
 def nse_get_name_change_tuples():

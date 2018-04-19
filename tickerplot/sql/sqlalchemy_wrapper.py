@@ -5,9 +5,8 @@ A wrapper script that hides all the details behind SQLAlchemy Core.
 import datetime
 
 from sqlalchemy import Table, Column, UniqueConstraint
-from sqlalchemy import Integer, String, Float, Date, Boolean, Enum, BigInteger
+from sqlalchemy import String, Float, Date, Boolean, Enum, BigInteger
 from sqlalchemy import MetaData
-from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError
 
 from sqlalchemy.sql import select as select_expr_
