@@ -23,11 +23,18 @@ We'd be interested in A, B, D, T mainly
 ## Force using print function
 from __future__ import print_function
 
-from tickerplot.utils.logger import get_logger
 import os
-module_logger = get_logger(os.path.basename(__file__))
+
+from collections import namedtuple
 
 import enum
+
+import requests
+import bs4
+
+from tickerplot.utils.logger import get_logger
+module_logger = get_logger(os.path.basename(__file__))
+
 class BSEGroup(enum.Enum):
     A = 'A'
     B = 'B'
@@ -38,10 +45,6 @@ class BSEGroup(enum.Enum):
     DT = 'DT'
     T = 'T'
 
-import requests
-import bs4
-
-from collections import namedtuple
 
 # The following two are global because we want to quickly update them if req
 # but we don't want them to be imported. This is very internal
@@ -63,7 +66,7 @@ def bse_get_all_stocks_list(start=None, count=-1):
     try:
         start = int(start) or 0
         count = int(count) or -1
-    except (ValueError, TypeError) as e: # Make sure both start and count can be 'int'ed
+    except (ValueError, TypeError): # Make sure both start and count can be 'int'ed
         raise
 
     module_logger.info("GET: %s", _STOCKS_LIST_URL)
@@ -96,10 +99,10 @@ def bse_get_all_stocks_list(start=None, count=-1):
 
     buttons_data = {
             'ctl00$ContentPlaceHolder1$btnSubmit.x' : '34',
-            'ctl00$ContentPlaceHolder1$btnSubmit.y' : '8' }
+            'ctl00$ContentPlaceHolder1$btnSubmit.y' : '8'}
 
-    more_data_2 = { '__EVENTTARGET' : 'ctl00$ContentPlaceHolder1$lnkDownload',
-                '__EVENTARGUMENT' : '' }
+    more_data_2 = {'__EVENTTARGET': 'ctl00$ContentPlaceHolder1$lnkDownload',
+                '__EVENTARGUMENT' : ''}
 
     form_data.update(other_data)
     form_data.update(buttons_data)
@@ -160,5 +163,5 @@ def bse_get_all_stocks_list(start=None, count=-1):
 
 
 if __name__ == '__main__':
-    for x in bse_get_all_stocks_list(count=-1):
-        print (x)
+    for stocks in bse_get_all_stocks_list(count=-1):
+        print (stocks)

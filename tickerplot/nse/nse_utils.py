@@ -7,12 +7,12 @@ Common utilities for getting stocks, indices data from NSE.
 from __future__ import print_function
 
 import os
-from tickerplot.utils.logger import get_logger
-module_logger = get_logger(os.path.basename(__file__))
+from collections import namedtuple
 
 import requests
 
-from collections import namedtuple
+from tickerplot.utils.logger import get_logger
+module_logger = get_logger(os.path.basename(__file__))
 
 ScripOHLCVD = namedtuple('ScripOHLCVD',
                             ['open', 'high', 'low', 'close', 'volume', 'deliv'])
@@ -71,7 +71,6 @@ def nse_get_name_change_tuples():
         return []
 
     name_tuples = []
-    changed_names = []
     for line in r.text.split('\n'):
         x = line.split(',')
         if len(x) < 3:
@@ -93,5 +92,5 @@ def nse_get_name_change_tuples():
 
 if __name__ == '__main__':
     nse_get_name_change_tuples()
-    for x in nse_get_all_stocks_list(count=-1):
-        print (x)
+    for stocks in nse_get_all_stocks_list(count=-1):
+        print (stocks)

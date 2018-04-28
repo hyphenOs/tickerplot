@@ -2,22 +2,23 @@
 A wrapper script that hides all the details behind SQLAlchemy Core.
 """
 
+from __future__ import print_function
+
 import datetime
+
+import enum
 
 from sqlalchemy import Table, Column, UniqueConstraint
 from sqlalchemy import String, Float, Date, Boolean, Enum, BigInteger
 from sqlalchemy import MetaData
 from sqlalchemy.exc import IntegrityError
 
-from sqlalchemy.sql import select as select_expr_
-select_expr = select_expr_
-
 from sqlalchemy import and_
-and_expr = and_
 
 from tickerplot.bse.bse_utils import BSEGroup
 
-import enum
+and_expr = and_
+
 class CorpActionEnum(enum.Enum):
     D = 'D'
     B = 'B'
@@ -53,7 +54,7 @@ def create_or_get_all_scrips_table(metadata=None):
     meta_data = metadata
 
     table_name = 'all_scrips_info'
-    if table_name not in meta_data.tables :
+    if table_name not in meta_data.tables:
         all_scrips_tbl = Table(table_name, meta_data,
                 Column('security_isin', String(16), primary_key=True),
                 Column('company_name', String(80)),
@@ -91,7 +92,7 @@ def create_or_get_nse_bhav_deliv_download_info(metadata=None):
     meta_data = metadata
 
     table_name = 'nse_bhav_deliv_download_info'
-    if table_name not in meta_data.tables :
+    if table_name not in meta_data.tables:
         nse_bhav_deliv_dl_info = Table(table_name, meta_data,
                     Column('download_date', Date, unique=True),
                     Column('bhav_success', Boolean, default=False),
@@ -265,4 +266,3 @@ def _do_execute_one(statement, engine=None):
 
 if __name__ == '__main__':
     print(create_or_get_all_scrips_table())
-

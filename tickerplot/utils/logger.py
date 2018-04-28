@@ -5,11 +5,6 @@
 logging utilities
 """
 
-import os
-import time
-from datetime import datetime as dt
-import sys
-
 import logging
 _LOG_FILE = 'tickerplot.log'
 

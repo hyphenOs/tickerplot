@@ -2,10 +2,11 @@ from __future__ import print_function
 
 import pandas as pd
 
+from sqlalchemy.sql import select as select_expr
+
 from tickerplot.sql.sqlalchemy_wrapper import execute_one, get_engine
 from tickerplot.sql.sqlalchemy_wrapper import create_or_get_all_scrips_table
 from tickerplot.sql.sqlalchemy_wrapper import create_or_get_nse_equities_hist_data
-from tickerplot.sql.sqlalchemy_wrapper import select_expr
 
 def get_all_scrips_names_in_db():
     all_scrips_table = create_or_get_all_scrips_table()

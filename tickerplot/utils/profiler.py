@@ -23,7 +23,7 @@ import pstats
 class TickerplotProfiler(object):
 
     def __init__(self, enabled=False, contextstr=None, fraction=1.0,
-                 sort_by='cumulative',parent=None, logger=None):
+                 sort_by='cumulative', parent=None, logger=None):
         self.enabled = enabled
 
         self.contextstr = contextstr or str(self.__class__)
@@ -93,8 +93,8 @@ if __name__ == '__main__':
         print(p.get_profile_data())
 
 
-    enabled = False
-    with TickerplotProfiler(enabled=enabled, contextstr='not enabled') as p:
+    profiling_enabled = False
+    with TickerplotProfiler(enabled=profiling_enabled, contextstr='not enabled') as p:
         for i in range(1000):
             r = re.compile(r'^$')
 
