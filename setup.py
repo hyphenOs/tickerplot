@@ -10,7 +10,10 @@ with open(os.path.join(curdir,'requirements.txt')) as f:
     all_reqs = f.read().split('\n')
 
 install_requires = [ x.strip() for x in all_reqs if (not x.startswith('#'))]
+# it's likely that we have something like -i -e
+install_requires = [ x for x in install_requires if not x.startswith('-i')]
 print install_requires
+
 
 dependency_links=install_requires
 
