@@ -75,7 +75,7 @@ class TickerplotProfiler(object):
         return value
 
 
-if __name__ == '__main__':
+if __name__ == '__main__': # pragma: no cover
 
     import re
 

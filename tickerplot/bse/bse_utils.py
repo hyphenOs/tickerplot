@@ -162,6 +162,6 @@ def bse_get_all_stocks_list(start=None, count=-1):
         yield bse_scrip_info
 
 
-if __name__ == '__main__':
+if __name__ == '__main__': # pragma: no cover
     for stocks in bse_get_all_stocks_list(count=-1):
         print (stocks)

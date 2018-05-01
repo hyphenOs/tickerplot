@@ -1,21 +1,19 @@
 from setuptools import setup, find_packages
 import os
 
-from tickerplot import __version__
-print __version__
-version = __version__
+from tickerplot import __version__ as version
 
 curdir = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(curdir,'requirements.txt')) as f:
     all_reqs = f.read().split('\n')
 
-install_requires = [ x.strip() for x in all_reqs if (not x.startswith('#'))]
+install_requires = [x.strip() for x in all_reqs if not x.startswith('#')]
 # it's likely that we have something like -i -e
-install_requires = [ x for x in install_requires if not x.startswith('-i')]
+install_requires = [x for x in install_requires if not x.startswith('-i')]
 print install_requires
 
 
-dependency_links=install_requires
+dependency_links = install_requires
 
 setup(name='tickerplot',
         version=version,

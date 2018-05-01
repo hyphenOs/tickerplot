@@ -6,4 +6,7 @@ venv3
 **/__pycache__
 **/*egg-info
 build
-dist
+**/dist
+cover/**
+.eggs
+.coverage
