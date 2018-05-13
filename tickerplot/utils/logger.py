@@ -1,6 +1,6 @@
 #
 # Refer to LICENSE file and README file for licensing information.
-#
+# pylint: disable-msg=global-statement
 """
 logging utilities
 """
