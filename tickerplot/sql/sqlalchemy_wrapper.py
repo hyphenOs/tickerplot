@@ -14,10 +14,13 @@ from sqlalchemy import MetaData
 from sqlalchemy.exc import IntegrityError
 
 from sqlalchemy import and_
+from sqlalchemy.sql import select  as sqlalchemy_select
+
+and_expr = and_
+select_expr = sqlalchemy_select
 
 from tickerplot.bse.bse_utils import BSEGroup
 
-and_expr = and_
 
 class CorpActionEnum(enum.Enum):
     D = 'D'
