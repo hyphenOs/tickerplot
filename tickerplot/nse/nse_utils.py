@@ -8,11 +8,13 @@ from __future__ import print_function
 
 import os
 from collections import namedtuple
+import logging
+
 
 import requests
 
-from tickerplot.utils.logger import get_logger
-module_logger = get_logger(os.path.basename(__file__))
+
+_logger = logging.getLogger(__name__)
 
 ScripOHLCVD = namedtuple('ScripOHLCVD',
                             ['open', 'high', 'low', 'close', 'volume', 'deliv'])
@@ -20,8 +22,10 @@ ScripOHLCVD = namedtuple('ScripOHLCVD',
 ScripBaseinfoNSE = namedtuple('ScripBaseinfoNSE',
                                     ['symbol', 'name', 'listing_date', 'isin'])
 
-ALL_STOCKS_CSV_URL = 'http://nseindia.com/corporates/datafiles/'\
-                        'LDE_EQUITIES_MORE_THAN_5_YEARS.csv'
+_ALL_STOCKS_CSV_URL = 'https://archives.nseindia.com/content/equities/EQUITY_L.csv'
+
+#_NAME_CHANGE_CSV_URL = 'https://archives.nseindia.com/content/equities/namechange.csv'
+_SYM_CHANGE_CSV_URL = 'https://archives.nseindia.com/content/equities/symbolchange.csv'
 
 def nse_get_all_stocks_list(start=None, count=-1):
     """ Returns a generator object of all stocks as a
@@ -34,8 +38,8 @@ def nse_get_all_stocks_list(start=None, count=-1):
     except ValueError: # Make sure both start and count can be 'int'ed
         raise
 
-    r = requests.get(ALL_STOCKS_CSV_URL)
-    module_logger.info("GET: %s", ALL_STOCKS_CSV_URL)
+    r = requests.get(_ALL_STOCKS_CSV_URL)
+    module_logger.info("GET: %s", _ALL_STOCKS_CSV_URL)
     if r.ok:
         i = 0
         for line in r.text.split("\n"):
@@ -59,14 +63,14 @@ def nse_get_all_stocks_list(start=None, count=-1):
             i += 1
             yield a
     else:
-        module_logger.error("GET: %s(%d)", ALL_STOCKS_CSV_URL, r.status_code)
+        _logger.error("GET: %s(%d)", ALL_STOCKS_CSV_URL, r.status_code)
         raise StopIteration
 
-def nse_get_name_change_tuples():
+def nse_get_sym_change_tuples():
     """Returns a list of name changes as a tuples, the most current name
     is the last name in the tuple."""
 
-    r = requests.get('http://nseindia.com/content/equities/symbolchange.csv')
+    r = requests.get(_SYM_CHANGE_CSV_URL)
     if not r.ok:
         return []
 
@@ -75,18 +79,10 @@ def nse_get_name_change_tuples():
         x = line.split(',')
         if len(x) < 3:
             continue
-        prev, cur, chdate = x[1].strip().upper(), x[2].strip().upper(), x[3].strip()
-        if chdate == 'SM_APPLICABLE_FROM':
+        name, prev, cur, chdate = x[0].strip(), x[1].strip(), x[2].strip(), x[3].strip()
+        if chdate == 'SM_APPLICABLE_FROM': # First line
             continue
         name_tuples.append((prev, cur, chdate,))
-        #if prev in changed_names:
-        #    tup = filter(lambda x: x[len(x)-1] == prev, name_tuples)
-        #    name_tuples.remove(tup[0])
-        #    name_tuples.append((tup[0] + (cur,)))
-        #else:
-        #    name_tuples.append((prev, cur,))
-        #module_logger.debug("name_change_tuple: %s" % str((prev, cur,)))
-        #changed_names.append(cur)
 
     return name_tuples
 
