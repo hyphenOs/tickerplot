@@ -4,17 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-pylint = "==1.8.4"
+pylint = ">=1.8.4"
 coverage = "*"
 mock = "*"
 nose = "*"
 
 
 [packages]
-bs4 = "==0.0.1"
-requests = "==2.18.4"
-pandas = "==0.20.3"
-sqlalchemy = "==1.1.13"
+bs4 = "*"
+requests = "*"
+pandas = "*"
+sqlalchemy = "*"
 
 [requires]
-python_version = "2.7"
+python_version = "3.5"
