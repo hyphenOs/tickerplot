@@ -1,5 +1,8 @@
 # `tickerplot` package
 
+This may likely work with Python 2, but are strongly recommended not to use
+Python 2.
+
 This package contains all the utility code that can be used by other packages.
 
 TODO : Update this list
