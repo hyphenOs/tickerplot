@@ -12,7 +12,7 @@ nose = "*"
 
 [packages]
 bs4 = "==0.0.1"
-requests = "==2.18.4"
+requests = "==2.20.0"
 pandas = "==0.20.3"
 sqlalchemy = "==1.1.13"
 
